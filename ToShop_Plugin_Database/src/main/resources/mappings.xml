@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.hibernate.org/xsd/hibernate-mapping
+        http://www.hibernate.org/xsd/hibernate-mapping/hibernate-mapping-4.0.xsd">
+
+    <class name="com.toshop.domain.entities.ShoppingList">
+        <id name="id" type="uuid-char"></id>
+        <list name="items" inverse="true" cascade="all" lazy="false">
+            <key>
+                <column name="shoppingList"></column>
+            </key>
+            <index column="idx"></index>
+            <one-to-many class="com.toshop.domain.entities.ShoppingListItem"></one-to-many>
+        </list>
+    </class>
+
+    <class name="com.toshop.domain.entities.ShoppingListItem">
+        <id name="id" type="uuid-char"></id>
+        <property name="amount" />
+        <many-to-one name="product" />
+        <many-to-one name="shoppingList" />
+    </class>
+
+    <class name="com.toshop.domain.entities.Product">
+        <id name="name" />
+        <property name="price" />
+    </class>
+
+</hibernate-mapping>
