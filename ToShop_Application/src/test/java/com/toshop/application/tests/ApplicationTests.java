@@ -1,9 +1,10 @@
 package com.toshop.application.tests;
 
 import com.toshop.application.Application;
-import com.toshop.application.tests.mock.MockDatabasePlugin;
-import com.toshop.application.tests.mock.MockUIPlugin;
-import org.junit.jupiter.api.BeforeAll;
+import com.toshop.application.interfaces.DatabasePlugin;
+import com.toshop.application.interfaces.UIPlugin;
+import org.easymock.EasyMock;
+import org.easymock.Mock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,17 +14,20 @@ public class ApplicationTests {
 
     private static Application testApplication;
 
-    @BeforeAll
-    static void initialize() {
-        var mockDatabase = new MockDatabasePlugin();
-        var mockUI = new MockUIPlugin();
-        testApplication = new Application(mockDatabase, mockUI);
-    }
+    @Mock
+    private static DatabasePlugin database = EasyMock.createMock(DatabasePlugin.class);
+
+    @Mock
+    private static UIPlugin ui = EasyMock.createMock(UIPlugin.class);
 
     @Test
     @DisplayName("Example Test")
     void exampleTest() {
+        ui.Initialize();
+        EasyMock.replay(ui, database);
+        testApplication = new Application(database, ui);
         assumeTrue(testApplication != null);
+        EasyMock.verify(ui, database);
     }
 
 }
