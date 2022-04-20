@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,6 +44,15 @@ public class SQLiteDatabasePlugin implements DatabasePlugin {
         var session = sessionFactory.openSession();
         try {
             return Optional.ofNullable(session.get(ShoppingList.class, shoppingListId));
+        } finally {
+            session.close();
+        }
+    }
+
+    public List<ShoppingList> getAll() {
+        var session = sessionFactory.openSession();
+        try {
+            return session.createQuery("FROM ShoppingList", ShoppingList.class).getResultList();
         } finally {
             session.close();
         }

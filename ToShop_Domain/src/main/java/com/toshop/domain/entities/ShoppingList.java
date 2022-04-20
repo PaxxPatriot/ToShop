@@ -10,10 +10,13 @@ public class ShoppingList {
     private UUID id;
     private List<ShoppingListItem> items;
 
-    public static ShoppingList create() {
+    private String name;
+
+    public static ShoppingList create(String name) {
         var newList = new ShoppingList();
         newList.items = new ArrayList<>();
         newList.id = UUID.randomUUID();
+        newList.name = name;
         return newList;
     }
 
@@ -21,6 +24,14 @@ public class ShoppingList {
         return id;
     }
     private void setId(UUID id) { this.id = id; }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public void addItem(ShoppingListItem item) {
         items.add(item);

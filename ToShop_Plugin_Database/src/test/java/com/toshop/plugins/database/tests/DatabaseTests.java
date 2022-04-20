@@ -20,7 +20,7 @@ public class DatabaseTests {
 
     @Test
     void testPersistAndGet() {
-        ShoppingList testShoppingList = ShoppingList.create();
+        ShoppingList testShoppingList = ShoppingList.create("test_list");
         testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product(4.99, "Cheese"), 2));
         testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product(2.99, "Bread"), 1));
 
