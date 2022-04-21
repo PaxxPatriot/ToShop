@@ -35,8 +35,8 @@ public class ShoppingListMenuController extends Controller<ShoppingListMenuView>
         return application.getSuggestedProducts();
     }
 
-    public void addItem(String text) {
-        application.addProductToShoppingList(currentShoppingList, text, 1);
+    public void addItem(String text, int amount) {
+        application.addProductToShoppingList(currentShoppingList, text, amount);
         application.saveShoppingList(currentShoppingList);
         view.update();
     }

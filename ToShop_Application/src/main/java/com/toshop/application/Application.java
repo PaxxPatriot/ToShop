@@ -42,13 +42,13 @@ public class Application {
         this.database.updateShoppingList(shoppingList);
     }
 
-    public void addProductToShoppingList(ShoppingList shoppingList, String productName, int quantity) {
+    public void addProductToShoppingList(ShoppingList shoppingList, String productName, int amount) {
         var product = database.getProduct(productName);
         if (product.isEmpty()) {
             product = Optional.ofNullable(new Product(productName));
             database.persistProduct(product.get());
         }
-        shoppingList.addItem(new ShoppingListItem(shoppingList, product.get(), quantity));
+        shoppingList.addItem(new ShoppingListItem(shoppingList, product.get(), amount));
     }
 
     public Collection<Product> getSuggestedProducts() {

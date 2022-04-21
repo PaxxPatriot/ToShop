@@ -58,28 +58,37 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         // Panel that contains a input field for entering new products at the top and below it a JList with suggested products
         var inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
-        var inputField = new JTextField();
-        inputField.setFont(ui.getDefaultFont().deriveFont(16f));
-        // Add placeholder text to input field
-        inputField.setText("Enter product name...");
-        // Make placeholder text light gray
-        inputField.setForeground(Color.LIGHT_GRAY);
-        inputField.addFocusListener(new FocusListener() {
+        var topInputPanel = new JPanel();
+        topInputPanel.setLayout(new BorderLayout());
+        var productNameInputField = new JTextField();
+        productNameInputField.setFont(ui.getDefaultFont().deriveFont(16f));
+        productNameInputField.setText("Enter product name...");
+        productNameInputField.setForeground(Color.LIGHT_GRAY);
+        productNameInputField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (inputField.getText().equals("Enter product name...")) {
-                    inputField.setText("");
-                    inputField.setForeground(Color.BLACK);
+                if (productNameInputField.getText().equals("Enter product name...")) {
+                    productNameInputField.setText("");
+                    productNameInputField.setForeground(Color.BLACK);
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                inputField.setText("Enter product name...");
-                inputField.setForeground(Color.LIGHT_GRAY);
+                if (productNameInputField.getText().equals("")) {
+                    productNameInputField.setText("Enter product name...");
+                    productNameInputField.setForeground(Color.LIGHT_GRAY);
+                }
             }
         });
-        inputPanel.add(inputField, BorderLayout.NORTH);
+        topInputPanel.add(productNameInputField, BorderLayout.CENTER);
+        // Add JSpinner next to the input field
+        var productAmountSpinner = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
+        // Set spinner width to fit 2 digits
+        productAmountSpinner.setPreferredSize(new Dimension(50, 20));
+        productAmountSpinner.setFont(ui.getDefaultFont().deriveFont(16f));
+        topInputPanel.add(productAmountSpinner, BorderLayout.EAST);
+        inputPanel.add(topInputPanel, BorderLayout.NORTH);
         var suggestedList = new JList<>(controller.getSuggestedProducts().toArray());
         suggestedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         suggestedList.setLayoutOrientation(JList.VERTICAL);
@@ -89,15 +98,19 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         suggestedList.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) {
-                    controller.addItem(suggestedList.getSelectedValue().toString());
+                if (evt.getClickCount() >= 2) {
+                    controller.addItem(suggestedList.getSelectedValue().toString(), (int) productAmountSpinner.getValue());
+                    evt.consume();
                 }
             }
         });
         inputPanel.add(suggestedList, BorderLayout.CENTER);
         // Add button that adds the input field to the shopping list
         var addButton = new JButton("Add");
-        addButton.addActionListener(e -> controller.addItem(inputField.getText()));
+        addButton.addActionListener(e -> {
+            controller.addItem(productNameInputField.getText(), (int) productAmountSpinner.getValue());
+            productNameInputField.setText("");
+        });
         inputPanel.add(addButton, BorderLayout.SOUTH);
         splitPane.setRightComponent(inputPanel);
 
