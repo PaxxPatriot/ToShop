@@ -21,12 +21,12 @@ public class DatabaseTests {
     @Test
     void testPersistAndGet() {
         ShoppingList testShoppingList = ShoppingList.create("test_list");
-        testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product(4.99, "Cheese"), 2));
-        testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product(2.99, "Bread"), 1));
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product("Cheese"), 2));
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product("Bread"), 1));
 
-        databasePlugin.persist(testShoppingList);
+        databasePlugin.persistShoppingList(testShoppingList);
 
-        var readList = databasePlugin.get(testShoppingList.getId());
+        var readList = databasePlugin.getShoppingList(testShoppingList.getId());
 
         assumeTrue(readList.isPresent());
 
@@ -34,5 +34,11 @@ public class DatabaseTests {
 
         assumeTrue(list.getId() == testShoppingList.getId());
         assumeTrue(list.getItems().size() == testShoppingList.getItems().size());
+
+        databasePlugin.deleteShoppingList(list);
+
+        var readListAfterDelete = databasePlugin.getShoppingList(testShoppingList.getId());
+
+        assumeTrue(readListAfterDelete.isEmpty());
     }
 }

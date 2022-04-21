@@ -1,9 +1,14 @@
 package com.toshop.plugins.ui.mvc.controllers;
 
+import com.toshop.domain.entities.Product;
 import com.toshop.domain.entities.ShoppingList;
+import com.toshop.domain.entities.ShoppingListItem;
 import com.toshop.plugins.ui.mvc.base.Controller;
 import com.toshop.plugins.ui.mvc.views.MainMenuView;
 import com.toshop.plugins.ui.mvc.views.ShoppingListMenuView;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ShoppingListMenuController extends Controller<ShoppingListMenuView> {
 
@@ -24,5 +29,15 @@ public class ShoppingListMenuController extends Controller<ShoppingListMenuView>
 
     public void goBack() {
         ui.setView(new MainMenuView());
+    }
+
+    public Collection<Product> getSuggestedProducts() {
+        return application.getSuggestedProducts();
+    }
+
+    public void addItem(String text) {
+        application.addProductToShoppingList(currentShoppingList, text, 1);
+        application.saveShoppingList(currentShoppingList);
+        view.update();
     }
 }

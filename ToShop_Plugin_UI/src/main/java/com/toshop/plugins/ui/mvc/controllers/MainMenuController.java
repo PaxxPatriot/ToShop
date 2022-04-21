@@ -31,4 +31,9 @@ public class MainMenuController extends Controller<MainMenuView> {
     public void selectShoppingList(ShoppingList shoppingList) {
         ui.setView(new ShoppingListMenuView(shoppingList));
     }
+
+    public void deleteShoppingList(ShoppingList shoppingList) {
+        application.deleteShoppingList(shoppingList);
+        ui.setView(new MainMenuView());
+    }
 }

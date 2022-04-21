@@ -1,5 +1,6 @@
 package com.toshop.application.interfaces;
 
+import com.toshop.domain.entities.Product;
 import com.toshop.domain.entities.ShoppingList;
 
 import java.util.Collection;
@@ -7,7 +8,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface DatabasePlugin {
-    void persist(ShoppingList list);
-    Optional<ShoppingList> get(UUID shoppingListId);
-    Collection<ShoppingList> getAll();
+    void persistShoppingList(ShoppingList list);
+    Optional<ShoppingList> getShoppingList(UUID shoppingListId);
+    Collection<ShoppingList> getAllShoppingLists();
+    void deleteShoppingList(ShoppingList list);
+    void updateShoppingList(ShoppingList shoppingList);
+
+    void persistProduct(Product product);
+    Collection<Product> getAllProducts();
+    Optional<Product> getProduct(String name);
 }

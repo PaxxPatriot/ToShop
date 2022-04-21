@@ -7,7 +7,7 @@
     <class name="com.toshop.domain.entities.ShoppingList">
         <id name="id" type="uuid-char"></id>
         <property name="name" />
-        <list name="items" inverse="true" cascade="all" lazy="false">
+        <list name="items" inverse="true" cascade="all" lazy="false" access="field">
             <key>
                 <column name="shoppingList"></column>
             </key>
@@ -19,13 +19,12 @@
     <class name="com.toshop.domain.entities.ShoppingListItem">
         <id name="id" type="uuid-char"></id>
         <property name="amount" />
-        <many-to-one name="product" />
+        <many-to-one name="product" cascade="none" column="product" />
         <many-to-one name="shoppingList" />
     </class>
 
     <class name="com.toshop.domain.entities.Product">
         <id name="name" />
-        <property name="price" />
     </class>
 
 </hibernate-mapping>

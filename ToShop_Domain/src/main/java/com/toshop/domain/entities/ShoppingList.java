@@ -34,7 +34,16 @@ public class ShoppingList {
     }
 
     public void addItem(ShoppingListItem item) {
-        items.add(item);
+        // Check if shopping list already contains the product, if so, update the quantity instead of adding a new item
+        var existingItem = items.stream()
+                .filter(i -> i.getProduct().getName().equals(item.getProduct().getName()))
+                .findFirst();
+        if (existingItem.isPresent()) {
+            existingItem.get().setAmount(existingItem.get().getAmount() + item.getAmount());
+        }
+        else {
+            items.add(item);
+        }
     }
 
     public void removeItem(ShoppingListItem item) {
