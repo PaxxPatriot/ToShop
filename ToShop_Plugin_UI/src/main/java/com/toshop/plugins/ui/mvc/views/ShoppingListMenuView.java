@@ -1,17 +1,22 @@
 package com.toshop.plugins.ui.mvc.views;
 
 import com.toshop.domain.entities.ShoppingList;
+import com.toshop.domain.entities.ShoppingListItem;
 import com.toshop.plugins.ui.mvc.base.View;
 import com.toshop.plugins.ui.mvc.controllers.ShoppingListMenuController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
     private JList<Object> shoppingListItemList;
+    private JList<Object> suggestedList;
 
     public ShoppingListMenuView(ShoppingList shoppingList) {
         super();
@@ -50,6 +55,77 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         shoppingListItemList.setLayoutOrientation(JList.VERTICAL);
         shoppingListItemList.setVisibleRowCount(-1);
         shoppingListItemList.setFont(ui.getDefaultFont().deriveFont(16f));
+        // Add right click action that opens popup menu that allows user to remove items
+        shoppingListItemList.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getButton() == 3 && shoppingListItemList.getSelectedIndex() != -1) {
+                    var popup = new JPopupMenu();
+                    var removeItem = new JMenuItem("Remove Item");
+                    removeItem.addActionListener(e -> {
+                        var selectedItem = shoppingListItemList.getSelectedValue();
+                        controller.removeShoppingListItem((ShoppingListItem) selectedItem);
+                    });
+                    popup.add(removeItem);
+                    // Add menu items to move items up and down
+                    var moveUp = new JMenuItem("Move Up");
+                    moveUp.addActionListener(e -> {
+                        var selectedItem = shoppingListItemList.getSelectedValue();
+                        controller.moveShoppingListItemUp((ShoppingListItem) selectedItem);
+                    });
+                    popup.add(moveUp);
+                    var moveDown = new JMenuItem("Move Down");
+                    moveDown.addActionListener(e -> {
+                        var selectedItem = shoppingListItemList.getSelectedValue();
+                        controller.moveShoppingListItemDown((ShoppingListItem) selectedItem);
+                    });
+                    popup.add(moveDown);
+                    popup.show(shoppingListItemList, evt.getX(), evt.getY());
+                }
+            }
+        });
+        // Allow reordering of items by dragging them
+        shoppingListItemList.setTransferHandler(new TransferHandler() {
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport info) {
+                return info.isDataFlavorSupported(DataFlavor.stringFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferHandler.TransferSupport info) {
+                if (!info.isDrop()) {
+                    return false;
+                }
+                var index = shoppingListItemList.getSelectedIndex();
+                var item = (ShoppingListItem) shoppingListItemList.getSelectedValue();
+                var dropLocation = shoppingListItemList.locationToIndex(info.getDropLocation().getDropPoint());
+                //if (dropLocation > index) {
+                //    dropLocation++;
+                //}
+                controller.moveShoppingListItem(item, dropLocation);
+                return true;
+            }
+
+            public int getSourceActions(JComponent c) {
+                return TransferHandler.COPY_OR_MOVE;
+            }
+
+            @Override
+            protected Transferable createTransferable(JComponent c) {
+                return new StringSelection(shoppingListItemList.getSelectedValue().toString());
+            }
+
+            @Override
+            public void exportDone(JComponent c, Transferable t, int action) {
+                if (action == TransferHandler.MOVE) {
+                    var item = (ShoppingListItem) shoppingListItemList.getSelectedValue();
+                    controller.removeShoppingListItem(item);
+                }
+            }
+        });
+        shoppingListItemList.setDropMode(DropMode.ON);
+        shoppingListItemList.setDragEnabled(true);
+
         listPanel.add(shoppingListItemList, BorderLayout.CENTER);
 
         // Add list to left side of split pane
@@ -89,7 +165,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         productAmountSpinner.setFont(ui.getDefaultFont().deriveFont(16f));
         topInputPanel.add(productAmountSpinner, BorderLayout.EAST);
         inputPanel.add(topInputPanel, BorderLayout.NORTH);
-        var suggestedList = new JList<>(controller.getSuggestedProducts().toArray());
+        suggestedList = new JList<>(controller.getSuggestedProducts().toArray());
         suggestedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         suggestedList.setLayoutOrientation(JList.VERTICAL);
         suggestedList.setVisibleRowCount(-1);
@@ -122,6 +198,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
     public void update() {
         shoppingListItemList.setListData(controller.currentShoppingList.getItems().toArray());
+        suggestedList.setListData(controller.getSuggestedProducts().toArray());
     }
 
 }

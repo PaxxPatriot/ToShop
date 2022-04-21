@@ -51,7 +51,7 @@ public class ShoppingList {
     }
 
     public List<ShoppingListItem> getItems() {
-        return Collections.unmodifiableList(items);
+        return items;
     }
 
     private void setItems(List<ShoppingListItem> items) {

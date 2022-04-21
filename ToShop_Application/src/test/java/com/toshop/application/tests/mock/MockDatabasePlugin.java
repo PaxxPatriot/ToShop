@@ -30,8 +30,9 @@ public class MockDatabasePlugin implements DatabasePlugin {
     }
 
     @Override
-    public void updateShoppingList(ShoppingList shoppingList) {
+    public ShoppingList updateShoppingList(ShoppingList shoppingList) {
         shoppingListDatabase.put(shoppingList.getId(), shoppingList);
+        return shoppingList;
     }
 
     @Override

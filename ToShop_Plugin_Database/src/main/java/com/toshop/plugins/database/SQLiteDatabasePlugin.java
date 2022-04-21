@@ -79,12 +79,13 @@ public class SQLiteDatabasePlugin implements DatabasePlugin {
     }
 
     @Override
-    public void updateShoppingList(ShoppingList shoppingList) {
+    public ShoppingList updateShoppingList(ShoppingList shoppingList) {
         var session = sessionFactory.openSession();
         try {
             var transaction = session.beginTransaction();
-            session.merge(shoppingList);
+            var updatedShoppingList = (ShoppingList)session.merge(shoppingList);
             transaction.commit();
+            return updatedShoppingList;
         } finally {
             session.close();
         }

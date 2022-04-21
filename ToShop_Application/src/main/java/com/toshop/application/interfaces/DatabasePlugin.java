@@ -12,7 +12,7 @@ public interface DatabasePlugin {
     Optional<ShoppingList> getShoppingList(UUID shoppingListId);
     Collection<ShoppingList> getAllShoppingLists();
     void deleteShoppingList(ShoppingList list);
-    void updateShoppingList(ShoppingList shoppingList);
+    ShoppingList updateShoppingList(ShoppingList shoppingList);
 
     void persistProduct(Product product);
     Collection<Product> getAllProducts();

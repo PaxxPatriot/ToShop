@@ -38,8 +38,8 @@ public class Application {
         this.database.deleteShoppingList(shoppingList);
     }
 
-    public void saveShoppingList(ShoppingList shoppingList) {
-        this.database.updateShoppingList(shoppingList);
+    public ShoppingList saveShoppingList(ShoppingList shoppingList) {
+        return this.database.updateShoppingList(shoppingList);
     }
 
     public void addProductToShoppingList(ShoppingList shoppingList, String productName, int amount) {
@@ -53,5 +53,9 @@ public class Application {
 
     public Collection<Product> getSuggestedProducts() {
         return this.database.getAllProducts();
+    }
+
+    public void removeShoppingListItem(ShoppingList currentShoppingList, ShoppingListItem item) {
+        currentShoppingList.removeItem(item);
     }
 }
