@@ -66,8 +66,6 @@ public class ApplicationTests {
 
         // Assert
         assumeTrue(mockDatabase.getProduct("Test Product").isPresent());
-        assumeTrue(mockDatabase.getAllProducts().stream().anyMatch(p -> p.getName().equals("Test Product")));
-        assumeTrue(testShoppingList.getItems().size() > 0);
         assumeTrue(testShoppingList.getItems().stream().anyMatch(i -> i.getProduct().getName().equals("Test Product")));
     }
 
