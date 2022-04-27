@@ -80,7 +80,7 @@ public class ShoppingListMenuController extends Controller<ShoppingListMenuView>
     }
 
     public void browseRecipes() {
-        RecipeBrowserDialog browser = new RecipeBrowserDialog(ui, application);
+        RecipeBrowserDialog browser = new RecipeBrowserDialog(ui, application, currentShoppingList);
         browser.setVisible(true);
     }
 }

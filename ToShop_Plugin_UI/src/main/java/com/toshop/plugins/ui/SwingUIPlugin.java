@@ -42,6 +42,10 @@ public class SwingUIPlugin implements UIPlugin {
         mainWindow.repaint();
     }
 
+    public View getCurrentView() {
+        return currentView;
+    }
+
     public Font getDefaultFont() {
         return defaultFont;
     }

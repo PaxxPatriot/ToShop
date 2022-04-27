@@ -1,5 +1,6 @@
 import com.toshop.application.Application;
 import com.toshop.application.interfaces.RecipeProviderPlugin;
+import com.toshop.domain.entities.Ingredient;
 import com.toshop.domain.entities.Recipe;
 import com.toshop.plugins.database.SQLiteDatabasePlugin;
 import com.toshop.plugins.recipes.spoonacular.SpoonacularRecipeProviderPlugin;
@@ -18,11 +19,11 @@ public class Program {
         var recipeProvider = new SpoonacularRecipeProviderPlugin("9e9a94f9481a4a72ae6b689cc6a227eb");
         var testProvider = new RecipeProviderPlugin() {
 
-            List<Recipe> recipes = Arrays.asList(new Recipe("1", "Recipe 1", "https://upload.wikimedia.org/wikipedia/commons/0/0f/Hungarian_goulash_soup.jpg"));
+            List<Recipe> recipes = Arrays.asList(new Recipe("1", "Recipe 1", "https://upload.wikimedia.org/wikipedia/commons/0/0f/Hungarian_goulash_soup.jpg", 1, 45, new Ingredient[]{new Ingredient(1, "eggplant")}, "Blallsadlasdlasldasldsald"));
 
             @Override
             public CompletableFuture<Collection<Recipe>> searchRecipes(String query) {
-                return CompletableFuture.completedFuture((Collection<Recipe>) recipes);
+                return CompletableFuture.completedFuture(recipes);
             }
 
             @Override
@@ -35,7 +36,7 @@ public class Program {
                 }
             }
         };
-        var application = new Application(database, ui, testProvider);
+        var application = new Application(database, ui, recipeProvider);
         application.run();
     }
 }

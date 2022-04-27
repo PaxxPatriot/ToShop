@@ -29,14 +29,20 @@ public class SpoonacularRecipeProviderPlugin implements RecipeProviderPlugin {
 
     @Override
     public CompletableFuture<Collection<Recipe>> searchRecipes(String query) {
-        var future = CompletableFuture.supplyAsync(() -> getTarget("complexSearch").queryParam("query", query).queryParam("number", 3).request().get(SearchResult.class));
-        var mappedFuture = future.thenApply(searchResult -> (Collection<Recipe>)Arrays.stream(searchResult.results).map(r -> new Recipe(Integer.toString(r.id), r.title, r.image)).collect(Collectors.toList()));
+        var future = CompletableFuture.supplyAsync(() -> {
+            var response = getTarget("complexSearch").queryParam("query", query).queryParam("number", 3).request().get();
+            return response.readEntity(SearchResult.class);
+        });
+        var mappedFuture = future.thenApply(searchResult -> (Collection<Recipe>)Arrays.stream(searchResult.results).map(r -> new Recipe(Integer.toString(r.id), r.title, r.image, 0, 0, null, "")).collect(Collectors.toList()));
         return mappedFuture;
     }
 
     @Override
     public CompletableFuture<Recipe> getDetailedRecipe(String id) {
-        var future = CompletableFuture.supplyAsync(() -> getTarget(id + "/information").request().get(Recipe.class));
+        var future = CompletableFuture.supplyAsync(() -> {
+            var response = getTarget(id + "/information").request().get();
+            return response.readEntity(Recipe.class);
+        });
         return future;
     }
 

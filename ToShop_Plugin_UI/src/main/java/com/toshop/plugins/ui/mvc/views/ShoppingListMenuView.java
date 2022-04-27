@@ -47,8 +47,9 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
         // Split main panel into two parts
         var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, main, new JPanel());
-        splitPane.setDividerLocation(0.80);
         splitPane.setResizeWeight(1);
+        // setDividerLocation using invokeLater to avoid NPE
+        SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.7));
 
         // Shopping List on the left
         JPanel shoppingListPanel = buildShoppingListPanel();
@@ -127,7 +128,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
                 }
             }
         });
-        inputPanel.add(suggestedList, BorderLayout.CENTER);
+        inputPanel.add(new JScrollPane(suggestedList), BorderLayout.CENTER);
         // Add button that adds the input field to the shopping list
         var addButton = new JButton("Add");
         addButton.addActionListener(e -> {
@@ -223,7 +224,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         shoppingListItemList.setDropMode(DropMode.ON);
         shoppingListItemList.setDragEnabled(true);
 
-        listPanel.add(shoppingListItemList, BorderLayout.CENTER);
+        listPanel.add(new JScrollPane(shoppingListItemList), BorderLayout.CENTER);
         return listPanel;
     }
 

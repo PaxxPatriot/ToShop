@@ -2,6 +2,7 @@ package com.toshop.plugins.ui;
 
 import com.toshop.application.Application;
 import com.toshop.domain.entities.Recipe;
+import com.toshop.domain.entities.ShoppingList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,14 +21,16 @@ public class RecipeBrowserDialog extends JDialog {
 
     private final SwingUIPlugin ui;
     private final Application application;
+    private final ShoppingList currentShoppingList;
     private JPanel searchResultPanel;
     private JTextField searchField;
     private JLabel resultLabel;
 
-    public RecipeBrowserDialog(SwingUIPlugin ui, Application app){
+    public RecipeBrowserDialog(SwingUIPlugin ui, Application app, ShoppingList currentShoppingList) {
         super();
         this.ui = ui;
         this.application = app;
+        this.currentShoppingList = currentShoppingList;
         this.setTitle("Recipe Browser");
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -190,7 +193,7 @@ public class RecipeBrowserDialog extends JDialog {
         detailedRecipeFuture.thenAccept(detailedRecipe -> {
             // Set cursor to default
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            var recipeDetailsDialog = new RecipeDetailsDialog(ui, application, detailedRecipe);
+            var recipeDetailsDialog = new RecipeDetailsDialog(ui, application, detailedRecipe, currentShoppingList);
             recipeDetailsDialog.setVisible(true);
         });
     }
