@@ -2,25 +2,31 @@ package com.toshop.application;
 
 import com.toshop.application.interfaces.*;
 import com.toshop.domain.entities.Product;
+import com.toshop.domain.entities.Recipe;
 import com.toshop.domain.entities.ShoppingList;
 import com.toshop.domain.entities.ShoppingListItem;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class Application {
 
-    private DatabasePlugin database;
-    private UIPlugin ui;
+    private final RecipeProviderPlugin recipeProvider;
+    private final DatabasePlugin database;
+    private final UIPlugin ui;
 
-    public Application(DatabasePlugin databasePlugin, UIPlugin uiPlugin) {
+    public Application(DatabasePlugin databasePlugin, UIPlugin uiPlugin, RecipeProviderPlugin recipeProviderPlugin) {
         this.database = databasePlugin;
         this.ui = uiPlugin;
+        this.recipeProvider = recipeProviderPlugin;
+    }
 
+    public void run() {
         System.out.println("Starting ToShop application...");
-        System.out.println("Database Plugin: " + databasePlugin.getClass().getName());
-        System.out.println("UI Plugin: " + uiPlugin.getClass().getName());
-
+        System.out.println("Database Plugin: " + database.getClass().getName());
+        System.out.println("UI Plugin: " + ui.getClass().getName());
+        System.out.println("Recipe Provider Plugin: " + recipeProvider.getClass().getName());
         this.ui.Initialize(this);
     }
 
@@ -58,4 +64,13 @@ public class Application {
     public void removeShoppingListItem(ShoppingList currentShoppingList, ShoppingListItem item) {
         currentShoppingList.removeItem(item);
     }
+
+    public CompletableFuture<Collection<Recipe>> searchRecipes(String query) {
+        return this.recipeProvider.searchRecipes(query);
+    }
+
+    public CompletableFuture<Recipe> getDetailedRecipe(String recipeId) {
+        return this.recipeProvider.getDetailedRecipe(recipeId);
+    }
 }
+

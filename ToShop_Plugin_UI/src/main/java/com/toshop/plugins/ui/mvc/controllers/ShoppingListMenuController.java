@@ -3,11 +3,11 @@ package com.toshop.plugins.ui.mvc.controllers;
 import com.toshop.domain.entities.Product;
 import com.toshop.domain.entities.ShoppingList;
 import com.toshop.domain.entities.ShoppingListItem;
+import com.toshop.plugins.ui.RecipeBrowserDialog;
 import com.toshop.plugins.ui.mvc.base.Controller;
 import com.toshop.plugins.ui.mvc.views.MainMenuView;
 import com.toshop.plugins.ui.mvc.views.ShoppingListMenuView;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class ShoppingListMenuController extends Controller<ShoppingListMenuView> {
@@ -77,5 +77,10 @@ public class ShoppingListMenuController extends Controller<ShoppingListMenuView>
             currentShoppingList = application.saveShoppingList(currentShoppingList);
             view.update();
         }
+    }
+
+    public void browseRecipes() {
+        RecipeBrowserDialog browser = new RecipeBrowserDialog(ui, application);
+        browser.setVisible(true);
     }
 }

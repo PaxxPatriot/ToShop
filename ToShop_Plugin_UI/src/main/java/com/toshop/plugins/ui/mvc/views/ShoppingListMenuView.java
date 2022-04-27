@@ -18,6 +18,8 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
     private JList<ShoppingListItem> shoppingListItemList;
     private JList<Product> suggestedList;
+    private JTextField productNameInputField;
+    private JSpinner productAmountSpinner;
 
     public ShoppingListMenuView(ShoppingList shoppingList) {
         super();
@@ -45,7 +47,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
         // Split main panel into two parts
         var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, main, new JPanel());
-        splitPane.setDividerLocation(0.85);
+        splitPane.setDividerLocation(0.80);
         splitPane.setResizeWeight(1);
 
         // Shopping List on the left
@@ -62,11 +64,26 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
     }
 
     private JPanel buildAddProductPanel() {
+        var outerPanel = new JPanel();
+        outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
+
+        var selectRecipePanel = new JPanel();
+        var browseRecipeButton = new JButton("Browse Recipes");
+        browseRecipeButton.addActionListener(e -> controller.browseRecipes());
+        selectRecipePanel.add(browseRecipeButton);
+        outerPanel.add(selectRecipePanel);
+
+        var midLabelPanel = new JPanel();
+        midLabelPanel.add(new JLabel("or add your own products:"));
+        outerPanel.add(midLabelPanel);
+
         var inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
         var topInputPanel = new JPanel();
         topInputPanel.setLayout(new BorderLayout());
-        var productNameInputField = new JTextField();
+        productNameInputField = new JTextField();
+        // Add product when pressing enter while entering product name
+        productNameInputField.addActionListener(e -> addProductWithNameFromInput());
         productNameInputField.setFont(ui.getDefaultFont().deriveFont(16f));
         productNameInputField.setText("Enter product name...");
         productNameInputField.setForeground(Color.LIGHT_GRAY);
@@ -89,7 +106,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         });
         topInputPanel.add(productNameInputField, BorderLayout.CENTER);
         // Add JSpinner next to the input field
-        var productAmountSpinner = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
+        productAmountSpinner = new JSpinner(new SpinnerNumberModel(1, 1, null, 1));
         // Set spinner width to fit 2 digits
         productAmountSpinner.setPreferredSize(new Dimension(50, 20));
         productAmountSpinner.setFont(ui.getDefaultFont().deriveFont(16f));
@@ -114,11 +131,17 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         // Add button that adds the input field to the shopping list
         var addButton = new JButton("Add");
         addButton.addActionListener(e -> {
-            controller.addItem(productNameInputField.getText(), (int) productAmountSpinner.getValue());
-            productNameInputField.setText("");
+            addProductWithNameFromInput();
         });
         inputPanel.add(addButton, BorderLayout.SOUTH);
-        return inputPanel;
+        outerPanel.add(inputPanel);
+        return outerPanel;
+    }
+
+    // Add product with name from input field to shopping list
+    private void addProductWithNameFromInput() {
+        controller.addItem(productNameInputField.getText(), (int) productAmountSpinner.getValue());
+        productNameInputField.setText("");
     }
 
     private JPanel buildShoppingListPanel() {
@@ -173,9 +196,9 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
                 var index = shoppingListItemList.getSelectedIndex();
                 var item = (ShoppingListItem) shoppingListItemList.getSelectedValue();
                 var dropLocation = shoppingListItemList.locationToIndex(info.getDropLocation().getDropPoint());
-                //if (dropLocation > index) {
-                //    dropLocation++;
-                //}
+                if (index == dropLocation) {
+                    return false;
+                }
                 controller.moveShoppingListItem(item, dropLocation);
                 return true;
             }

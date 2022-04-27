@@ -2,6 +2,7 @@ package com.toshop.application.tests;
 
 import com.toshop.application.Application;
 import com.toshop.application.tests.mock.MockDatabasePlugin;
+import com.toshop.application.tests.mock.MockRecipeProviderPlugin;
 import com.toshop.application.tests.mock.MockUIPlugin;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,8 @@ public class ApplicationTests {
     static void initialize() {
         var mockDatabase = new MockDatabasePlugin();
         var mockUI = new MockUIPlugin();
-        testApplication = new Application(mockDatabase, mockUI);
+        var mockRecipeProvider = new MockRecipeProviderPlugin();
+        testApplication = new Application(mockDatabase, mockUI, mockRecipeProvider);
     }
 
     @Test
