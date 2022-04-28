@@ -46,7 +46,8 @@ public class ShoppingListItem {
         this.shoppingList = shoppingList;
     }
 
-    public double getTotalPrice() {
-        return product.getPrice() * amount;
+    @Override
+    public String toString() {
+        return amount + "x " + product.getName();
     }
 }

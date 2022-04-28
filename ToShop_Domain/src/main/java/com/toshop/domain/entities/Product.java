@@ -1,24 +1,14 @@
 package com.toshop.domain.entities;
 
 public class Product {
-    private double price;
     private String name;
 
     public Product() {
 
     }
 
-    public Product(double price, String name) {
-        this.price = price;
+    public Product(String name) {
         this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    private void setPrice(double price) {
-        this.price = price;
     }
 
     public String getName() {
@@ -27,5 +17,10 @@ public class Product {
 
     private void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

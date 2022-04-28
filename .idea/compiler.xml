@@ -6,19 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ToShop_Plugin_Database" />
+        <module name="ToShop_Application" />
         <module name="ToShop_Domain" />
         <module name="ToShop" />
-        <module name="ToShop_Plugin_UI" />
-        <module name="ToShop_Application" />
+        <module name="ToShop_Plugin_Recipes" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ToShop" target="14" />
-      <module name="ToShop_Application" target="14" />
-      <module name="ToShop_Domain" target="14" />
-      <module name="ToShop_Plugin_Database" target="14" />
-      <module name="ToShop_Plugin_UI" target="14" />
-    </bytecodeTargetLevel>
   </component>
 </project>
