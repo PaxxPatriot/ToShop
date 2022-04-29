@@ -44,9 +44,7 @@ public class ApplicationTests {
     @DisplayName("Delete Shopping List")
     void testDeleteShoppingList() {
         // Arrange
-        String name = "Test List";
-        ShoppingList testShoppingList = ShoppingList.create(name);
-        mockDatabase.persistShoppingList(testShoppingList);
+        var testShoppingList = createTestShoppingList("Test List Delete");
 
         // Act
         testApplication.deleteShoppingList(testShoppingList);
@@ -59,9 +57,7 @@ public class ApplicationTests {
     @DisplayName("Add Product to Shopping List")
     void testAddProduct() {
         // Arrange
-        String name = "Test List";
-        ShoppingList testShoppingList = ShoppingList.create(name);
-        mockDatabase.persistShoppingList(testShoppingList);
+        var testShoppingList = createTestShoppingList("Test List Add Product");
 
         // Act
         testApplication.addProductToShoppingList(testShoppingList, "Test Product", 16);
@@ -75,9 +71,7 @@ public class ApplicationTests {
     @DisplayName("Update Product last used date")
     void testUpdateProductDate() throws InterruptedException {
         // Arrange
-        String name = "Test List";
-        ShoppingList testShoppingList = ShoppingList.create(name);
-        mockDatabase.persistShoppingList(testShoppingList);
+        var testShoppingList = createTestShoppingList("Test List Update");
 
         // Act
         testApplication.addProductToShoppingList(testShoppingList, "Test Product", 16);
@@ -89,4 +83,9 @@ public class ApplicationTests {
         assumeTrue(secondDate.after(firstDate));
     }
 
+    private ShoppingList createTestShoppingList(String name) {
+        ShoppingList testShoppingList = ShoppingList.create(name);
+        mockDatabase.persistShoppingList(testShoppingList);
+        return testShoppingList;
+    }
 }
