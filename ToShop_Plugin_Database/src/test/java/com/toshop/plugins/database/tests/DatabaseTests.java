@@ -41,4 +41,23 @@ public class DatabaseTests {
 
         assumeTrue(readListAfterDelete.isEmpty());
     }
+
+    @Test
+    void testMerge() {
+        // Arrange
+        ShoppingList testShoppingList = ShoppingList.create("test_list_update");
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, Product.create("Cheese"), 2));
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, Product.create("Bread"), 1));
+        databasePlugin.persistShoppingList(testShoppingList);
+
+        // Act
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, Product.create("Tomato"), 2));
+        databasePlugin.updateShoppingList(testShoppingList);
+
+        var readListAfterUpdate = databasePlugin.getShoppingList(testShoppingList.getId());
+
+        // Assert
+        assumeTrue(readListAfterUpdate.isPresent());
+        assumeTrue(readListAfterUpdate.get().getItems().size() == 3);
+    }
 }
