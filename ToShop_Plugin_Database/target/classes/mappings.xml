@@ -24,7 +24,9 @@
     </class>
 
     <class name="com.toshop.domain.entities.Product">
-        <id name="name" />
+        <id name="name" access="field"/>
+        <property name="firstAddedDate" access="field"/>
+        <property name="lastAddedDate" access="field"/>
     </class>
 
 </hibernate-mapping>

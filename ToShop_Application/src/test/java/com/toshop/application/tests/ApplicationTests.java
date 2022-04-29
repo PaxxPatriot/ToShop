@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class ApplicationTests {
@@ -67,6 +69,24 @@ public class ApplicationTests {
         // Assert
         assumeTrue(mockDatabase.getProduct("Test Product").isPresent());
         assumeTrue(testShoppingList.getItems().stream().anyMatch(i -> i.getProduct().getName().equals("Test Product")));
+    }
+
+    @Test
+    @DisplayName("Update Product last used date")
+    void testUpdateProductDate() throws InterruptedException {
+        // Arrange
+        String name = "Test List";
+        ShoppingList testShoppingList = ShoppingList.create(name);
+        mockDatabase.persistShoppingList(testShoppingList);
+
+        // Act
+        testApplication.addProductToShoppingList(testShoppingList, "Test Product", 16);
+        Date firstDate = mockDatabase.getProduct("Test Product").get().getLastAddedDate();
+        Thread.sleep(1);
+        testApplication.addProductToShoppingList(testShoppingList, "Test Product", 5);
+        Date secondDate = mockDatabase.getProduct("Test Product").get().getLastAddedDate();
+        // Assert
+        assumeTrue(secondDate.after(firstDate));
     }
 
 }

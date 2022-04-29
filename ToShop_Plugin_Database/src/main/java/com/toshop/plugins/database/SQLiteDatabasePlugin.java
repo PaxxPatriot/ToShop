@@ -122,4 +122,17 @@ public class SQLiteDatabasePlugin implements DatabasePlugin {
             session.close();
         }
     }
+
+    @Override
+    public Product updateProduct(Product product) {
+        var session = sessionFactory.openSession();
+        try {
+            var transaction = session.beginTransaction();
+            var updatedProduct = (Product)session.merge(product);
+            transaction.commit();
+            return updatedProduct;
+        } finally {
+            session.close();
+        }
+    }
 }

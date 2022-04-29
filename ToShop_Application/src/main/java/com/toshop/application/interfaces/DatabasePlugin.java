@@ -17,4 +17,5 @@ public interface DatabasePlugin {
     void persistProduct(Product product);
     Collection<Product> getAllProducts();
     Optional<Product> getProduct(String name);
+    Product updateProduct(Product product);
 }

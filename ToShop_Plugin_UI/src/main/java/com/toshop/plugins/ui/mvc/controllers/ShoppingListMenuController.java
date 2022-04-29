@@ -8,7 +8,9 @@ import com.toshop.plugins.ui.mvc.base.Controller;
 import com.toshop.plugins.ui.mvc.views.MainMenuView;
 import com.toshop.plugins.ui.mvc.views.ShoppingListMenuView;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 public class ShoppingListMenuController extends Controller<ShoppingListMenuView> {
 
@@ -31,8 +33,10 @@ public class ShoppingListMenuController extends Controller<ShoppingListMenuView>
         ui.setView(new MainMenuView());
     }
 
-    public Collection<Product> getSuggestedProducts() {
-        return application.getSuggestedProducts();
+    public Product[] getSuggestedProducts() {
+        var suggestions =  application.getSuggestedProducts().toArray(new Product[0]);
+        Arrays.sort(suggestions, Comparator.comparing(Product::getLastAddedDate).reversed());
+        return suggestions;
     }
 
     public void addItem(String text, int amount) {

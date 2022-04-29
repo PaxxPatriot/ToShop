@@ -50,11 +50,16 @@ public class Application {
 
     public void addProductToShoppingList(ShoppingList shoppingList, String productName, int amount) {
         var product = database.getProduct(productName);
+        Product productToAdd;
         if (product.isEmpty()) {
-            product = Optional.ofNullable(new Product(productName));
+            product = Optional.ofNullable(Product.create(productName));
             database.persistProduct(product.get());
+            productToAdd = product.get();
+        } else {
+            product.get().updateLastUsed();
+            productToAdd = database.updateProduct(product.get());
         }
-        shoppingList.addItem(new ShoppingListItem(shoppingList, product.get(), amount));
+        shoppingList.addItem(new ShoppingListItem(shoppingList, productToAdd, amount));
     }
 
     public Collection<Product> getSuggestedProducts() {

@@ -48,4 +48,10 @@ public class MockDatabasePlugin implements DatabasePlugin {
     public Optional<Product> getProduct(String name) {
         return Optional.ofNullable(productDatabase.get(name));
     }
+
+    @Override
+    public Product updateProduct(Product product) {
+        productDatabase.put(product.getName(), product);
+        return product;
+    }
 }

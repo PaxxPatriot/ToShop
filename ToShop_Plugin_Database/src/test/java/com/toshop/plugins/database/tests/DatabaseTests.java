@@ -21,8 +21,8 @@ public class DatabaseTests {
     @Test
     void testPersistAndGet() {
         ShoppingList testShoppingList = ShoppingList.create("test_list");
-        testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product("Cheese"), 2));
-        testShoppingList.addItem(new ShoppingListItem(testShoppingList, new Product("Bread"), 1));
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, Product.create("Cheese"), 2));
+        testShoppingList.addItem(new ShoppingListItem(testShoppingList, Product.create("Bread"), 1));
 
         databasePlugin.persistShoppingList(testShoppingList);
 

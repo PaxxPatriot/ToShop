@@ -13,6 +13,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
@@ -113,7 +115,8 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
         productAmountSpinner.setFont(ui.getDefaultFont().deriveFont(16f));
         topInputPanel.add(productAmountSpinner, BorderLayout.EAST);
         inputPanel.add(topInputPanel, BorderLayout.NORTH);
-        suggestedList = new JList<>(controller.getSuggestedProducts().toArray(new Product[0]));
+        var suggestions = controller.getSuggestedProducts();
+        suggestedList = new JList<>(suggestions);
         suggestedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         suggestedList.setLayoutOrientation(JList.VERTICAL);
         suggestedList.setVisibleRowCount(-1);
@@ -230,7 +233,7 @@ public class ShoppingListMenuView extends View<ShoppingListMenuController> {
 
     public void update() {
         shoppingListItemList.setListData(controller.currentShoppingList.getItems().toArray(new ShoppingListItem[0]));
-        suggestedList.setListData(controller.getSuggestedProducts().toArray(new Product[0]));
+        suggestedList.setListData(controller.getSuggestedProducts());
     }
 
 }
